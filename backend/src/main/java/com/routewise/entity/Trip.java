@@ -15,7 +15,7 @@ public class Trip {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String email;
+    //private String email;
 
     private String Destination;
 

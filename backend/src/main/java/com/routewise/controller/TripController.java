@@ -38,4 +38,31 @@ public class TripController {
                 tripService.getMyTrips(email)
         );
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Trip>getTripById(@PathVariable Long id, Authentication authentication){
+        String email = authentication.getName();
+
+        return ResponseEntity.ok(
+                tripService.getTripById(id,email)
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Trip>updateTrip(@PathVariable Long id,@RequestBody Trip trip, Authentication authentication){
+        String email = authentication.getName();
+
+        return ResponseEntity.ok(
+                tripService.updateTrip(id,trip,email)
+        );
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String>deleteTrip(@PathVariable Long id,Authentication authentication){
+        String email = authentication.getName();
+        tripService.deleteTrip(id,email);
+        return ResponseEntity.ok("Trip deleted successfully!");
+    }
+
+
+
 }
