@@ -1,5 +1,7 @@
 package com.routewise.controller;
 
+import com.routewise.dto.TripRequest;
+import com.routewise.dto.TripResponse;
 import com.routewise.entity.Trip;
 import com.routewise.service.TripService;
 import lombok.AllArgsConstructor;
@@ -17,19 +19,19 @@ public class TripController {
     private final TripService tripService;
 
     @PostMapping
-    public ResponseEntity<Trip> createTrip(
-            @RequestBody Trip trip,
+    public ResponseEntity<TripResponse> createTrip(
+            @RequestBody TripRequest tripRequest,
             Authentication authentication) {
 
         String email = authentication.getName();
 
         return ResponseEntity.ok(
-                tripService.createTrip( email,trip)
+                tripService.createTrip( email,tripRequest)
         );
     }
 
     @GetMapping
-    public ResponseEntity<List<Trip>> getMyTrips(
+    public ResponseEntity<List<TripResponse>> getMyTrips(
             Authentication authentication) {
 
         String email = authentication.getName();
@@ -40,7 +42,7 @@ public class TripController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Trip>getTripById(@PathVariable Long id, Authentication authentication){
+    public ResponseEntity<TripResponse>getTripById(@PathVariable Long id, Authentication authentication){
         String email = authentication.getName();
 
         return ResponseEntity.ok(
@@ -49,11 +51,11 @@ public class TripController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Trip>updateTrip(@PathVariable Long id,@RequestBody Trip trip, Authentication authentication){
+    public ResponseEntity<TripResponse>updateTrip(@PathVariable Long id,@RequestBody TripRequest tripRequest, Authentication authentication){
         String email = authentication.getName();
 
         return ResponseEntity.ok(
-                tripService.updateTrip(id,trip,email)
+                tripService.updateTrip(id,tripRequest,email)
         );
     }
     @DeleteMapping("/{id}")
