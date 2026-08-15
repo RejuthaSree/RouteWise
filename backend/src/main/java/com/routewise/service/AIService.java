@@ -97,6 +97,50 @@ public class AIService {
             );
         }
     }
+    public String generateBudgetEstimate(String destination,long days,int travelers,String budget){
+        String prompt= """
+                Estimate travel expenses for:
+                
+                Destination: %s
+                Days: %d
+                Travelers: %d
+                Budget Type: %s
+                
+                Return ONLY valid JSON:
+                
+                {
+                 "hotelCost":0,
+                 "foodCost":0,
+                 "transportCost":0,
+                 "activitiesCost":0,
+                 "miscellaneousCost":0,
+                 "totalCost":0
+                }
+              
+                """.formatted(destination,days,travelers,budget);
+        Map<String,Object> requestBody =new HashMap<>();
+        requestBody.put("model","gemini-3.5-flash");
+        requestBody.put("input",prompt);
+        requestBody.put("stream",false);
+
+        String response=
+                webClient.post()
+                        .uri(geminiApiUrl)
+                        .header("x-goog-api-key",geminiApiKey)
+                        .header("Content-Type", "application/json")
+                        .bodyValue(requestBody)
+                        .exchangeToMono(clientResponse ->
+                                clientResponse.bodyToMono(String.class)
+                                        .map(body -> {
+                                            System.out.println("Status: " + clientResponse.statusCode());
+                                            System.out.println("Body: " + body);
+                                            return body;
+                                        })
+                        )
+                        .block();
+
+        return extractResponse(response);
+    }
 }
 
 
